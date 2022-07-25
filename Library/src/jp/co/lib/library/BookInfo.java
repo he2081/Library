@@ -87,9 +87,9 @@ public class BookInfo {
 	
 	public void setStatus(boolean status) {
 		if(status) {
-			status = false;
+			this.status = false;
 		}else {
-			status = true;
+			this.status = true;
 		}
 	}
 }
