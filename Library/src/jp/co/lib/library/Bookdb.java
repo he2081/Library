@@ -3,8 +3,7 @@ import java.util.*;
 
 public class Bookdb {
 	
-	BookInfo book; //本 private未
-	ArrayList<BookInfo> bookList = new ArrayList<BookInfo>(); //本リスト
+	private ArrayList<BookInfo> bookList = new ArrayList<BookInfo>(); //本リスト
 	
 	//本の登録
 	public Bookdb() {
@@ -17,11 +16,18 @@ public class Bookdb {
 		bookList.add(new BookInfo(5, "seraku6", "seraku rokuro", "serakusha", 2022));
 	}
 	
-//	CRUD(Create:登録 Read:参照 Update:更新 Delete:削除)
-//  ISBNコードを受け取るとコードから本を検索
-	
+	//ISBNコードを貰う→本の情報を返すメソッド
+	public BookInfo passBookInfo(int isbnCode) {
+		for(int i = 0; i < bookList.size(); i++) {
+			if(bookList.get(i).getCode() == isbnCode) {
+				return bookList.get(i);
+			}
+		}
+		return null;
+	}
+
 	//本のリストを全て表示
-	void showLibrary() {
+	public void showLibrary() {
 		System.out.println("Book List");
 		System.out.println("-----------------------------------");
 		
@@ -33,5 +39,10 @@ public class Bookdb {
 			System.out.println("出版年: " + bookList.get(i).getYear());
 			System.out.println("-----------------------------------");
 		}
+	}
+	
+	//ゲッター
+	public ArrayList<BookInfo> getBookList() {
+		return bookList;
 	}
 }

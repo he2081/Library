@@ -6,10 +6,40 @@ public class MenuLibrary {
 	//プロパティ
 	//図書館
 	SystemLibrary system; //図書館システム
+	Scanner scan = new Scanner(System.in);
 	
+	//コンストラクター
 	public MenuLibrary() {
-		// TODO 自動生成されたコンストラクター・スタブ
 		system = new SystemLibrary();
+	}
+	
+	//スキャナー(戻り値：整数型)
+	public int inputInteger() {
+		String tempAnswer = scan.next();
+		int answer = Integer.parseInt(tempAnswer); //取得した値を整数型に変換
+		return answer;
+	}
+	
+	//スキャナー(戻り値：整数型)
+	public String inputString() {
+		String answer = scan.next();
+		return answer;
+	}
+	
+	//書籍情報を表示
+	public void displayInfo(BookInfo book) {	
+		if(book != null) {
+			System.out.println("-----------------------------------");
+			System.out.println("ISBNコード: " + book.getCode());
+			System.out.println("題名: " + book.getName());
+			System.out.println("作者: " + book.getAuthor());
+			System.out.println("出版社: " + book.getPublisher());
+			System.out.println("出版年: " + book.getYear());
+			System.out.println("状態: " + book.getStatusString());
+			System.out.println("-----------------------------------");
+		}else {
+			System.out.println("エラー: お探しの本は見つかりませんでした");
+		}
 	}
 	
 	//選択画面
@@ -38,28 +68,22 @@ public class MenuLibrary {
 		case 1:
 			
 			System.out.println("新しく登録する書籍のISBNコードを入力してください");
-			Scanner scanCode = new Scanner(System.in);
-			String tempCode = scanCode.next();
-			int code = Integer.parseInt(tempCode);
+			int case1Code = inputInteger();
 			
 			System.out.println("新しく登録する書籍の題名を入力してください");
-			Scanner scanName = new Scanner(System.in);
-			String name = scanName.next();
+			String name = inputString();
 			
 			System.out.println("新しく登録する書籍の作者名を入力してください");
-			Scanner scanAuthor = new Scanner(System.in);
-			String author = scanAuthor.next();
+			String author = inputString();
 			
 			System.out.println("新しく登録する書籍の出版社を入力してください");
-			Scanner scanPublisher = new Scanner(System.in);
-			String publisher = scanPublisher.next();
+			String publisher = inputString();
 			
 			System.out.println("新しく登録する書籍の出版年を入力してください");
-			Scanner scanYear = new Scanner(System.in);
-			String tempYear = scanYear.next();
-			int year = Integer.parseInt(tempYear);
+			int year = inputInteger();
             
-			this.system.create(code, name, author, publisher, year);
+			system.create(case1Code, name, author, publisher, year);
+			System.out.println("書籍の登録が完了しました");
 			
             break;
             
@@ -67,27 +91,69 @@ public class MenuLibrary {
         case 2:
         	
         	System.out.println("参照したい書籍のISBNコードを入力してください");
-        	Scanner scanCode2 = new Scanner(System.in);
-			String tempCode2 = scanCode2.next();
-			int code2 = Integer.parseInt(tempCode2);
+			int case2Code = inputInteger();
 			
-        	this.system.read(code2);
+			//system.library.passBookInfo():入力されたコードの書籍を本棚から探してくる
+			BookInfo case2Book = system.library.passBookInfo(case2Code);
+			displayInfo(case2Book);
         	
             break;
         
-        //更新
+        //貸出状況の変更
         case 3:
-            this.system.update();
+        	
+        	System.out.println("貸出状況を変更したい書籍のISBNコードを入力してください");
+        	int case3Code = inputInteger();
+        	
+        	BookInfo case3Book = system.library.passBookInfo(case3Code);
+        	displayInfo(case3Book);
+        	
+        	if(case3Book != null) {
+        		while(true) {
+        			System.out.println("書籍の状態を変更しますか？(yes/no)" );
+        			String case3Answer = inputString();
+        			
+        			if(case3Answer.equals("yes")) {
+        				system.changeStatus(case3Book);
+        				System.out.println("変更が完了しました");
+        				break;
+        			}else if(case3Answer.equals("no")){
+        				break;
+        			}else {
+        				System.out.println("エラー: yes,またはnoで入力してください");
+        				continue;
+        			}
+        		}
+        	}
+        	
             break;
             
         //削除
         case 4:
         	System.out.println("削除したい書籍のISBNコードを入力してください");
-        	Scanner scanCode3 = new Scanner(System.in);
-			String tempCode3 = scanCode3.next();
-			int code3 = Integer.parseInt(tempCode3);
+        	int case4Code = inputInteger();
+        	
+        	BookInfo case4Book = system.library.passBookInfo(case4Code);
+        	displayInfo(case4Book);
+        	
+        	if(case4Book != null) {
+        		while(true) {
+        			System.out.println("この書籍を削除しますか？(yes/no)" );
+        			String case4Answer = inputString();
+        			
+        			if(case4Answer.equals("yes")) {
+        				system.deleteBook(case4Book);
+        				System.out.println("書籍の削除が完了しました");
+        				break;
+        			}else if(case4Answer.equals("no")){
+        				break;
+        			}else {
+        				System.out.println("エラー: yes,またはnoで入力してください");
+        				continue;
+        			}
+        		}
+        	}
 			
-        	this.system.delete(code3);
         	break;
         	
         //その他
